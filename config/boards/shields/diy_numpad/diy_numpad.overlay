@@ -11,17 +11,18 @@
  * ROW5: 0 (2U wide)   Del   [Enter cont.]
  *
  * COL0=D2, COL1=D3, COL2=D4, COL3=D5
- * ROW0=D21, ROW1=D20, ROW2=D19, ROW3=D18, ROW4=D17, ROW5=D16
+ * ROW0=D21, ROW1=D20, ROW2=D19, ROW3=D18, ROW4=D15, ROW5=D16
+ * Note: D17 does not exist on nice!nano; D15 (SCK) is the adjacent pin
  *
  * Diode direction: col2row
  */
 
-#include <dt-bindings/zmk/matrix-transform.h>
+#include <dt-bindings/zmk/matrix_transform.h>
 
 / {
     chosen {
         zmk,kscan = &kscan0;
-        zmk,matrix-transform = &default_transform;
+        zmk,physical-layout = &default_layout;
     };
 
     default_transform: keymap_transform_0 {
@@ -46,6 +47,13 @@
         >;
     };
 
+    default_layout: default_layout {
+        compatible = "zmk,physical-layout";
+        display-name = "Default";
+        transform = <&default_transform>;
+        kscan = <&kscan0>;
+    };
+
     kscan0: kscan {
         compatible = "zmk,kscan-gpio-matrix";
         diode-direction = "col2row";
@@ -55,7 +63,7 @@
             , <&pro_micro 20 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
             , <&pro_micro 19 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
             , <&pro_micro 18 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
-            , <&pro_micro 17 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&pro_micro 15 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
             , <&pro_micro 16 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
             ;
 
