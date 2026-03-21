@@ -1,0 +1,35 @@
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+
+/ {
+    keymap {
+        compatible = "zmk,keymap";
+
+        default_layer {
+            /*
+             * ┌────────┬──────┬────────┬─────────┐
+             * │PRTSCR  │ INS  │ SCRLK  │  PAUSE  │
+             * ├────────┼──────┼────────┼─────────┤
+             * │  NUM   │  /   │   *    │    -    │
+             * ├────────┼──────┼────────┼─────────┤
+             * │   7    │  8   │   9    │         │
+             * ├────────┼──────┼────────┤    +    │
+             * │   4    │  5   │   6    │         │
+             * ├────────┼──────┼────────┼─────────┤
+             * │   1    │  2   │   3    │   ENT   │
+             * ├─────────────┬─┴──────┐ │         │
+             * │      0      │  DEL   │ │         │
+             * └─────────────┴────────┘ └─────────┘
+             * (21 keys total)
+             */
+            bindings = <
+                &kp PSCRN   &kp INS     &kp SLCK    &kp PAUSE_BREAK
+                &kp KP_NLCK &kp KP_SLASH &kp KP_ASTERISK &kp KP_MINUS
+                &kp KP_N7   &kp KP_N8   &kp KP_N9   &kp KP_PLUS
+                &kp KP_N4   &kp KP_N5   &kp KP_N6
+                &kp KP_N1   &kp KP_N2   &kp KP_N3   &kp KP_ENTER
+                &kp KP_N0               &kp KP_DOT
+            >;
+        };
+    };
+};

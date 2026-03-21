@@ -1,0 +1,69 @@
+/*
+ * DIY Numpad - 21 Keys
+ *
+ * Matrix layout (6 rows x 4 cols):
+ *
+ * ROW0: F1     F2     F3     F4
+ * ROW1: Num    /      *      -
+ * ROW2: 7      8      9      + (2U tall)
+ * ROW3: 4      5      6      [+ cont.]
+ * ROW4: 1      2      3      Enter (2U tall)
+ * ROW5: 0 (2U wide)   Del   [Enter cont.]
+ *
+ * COL0=D2, COL1=D3, COL2=D4, COL3=D5
+ * ROW0=D21, ROW1=D20, ROW2=D19, ROW3=D18, ROW4=D17, ROW5=D16
+ *
+ * Diode direction: col2row
+ */
+
+#include <dt-bindings/zmk/matrix-transform.h>
+
+/ {
+    chosen {
+        zmk,kscan = &kscan0;
+        zmk,matrix-transform = &default_transform;
+    };
+
+    default_transform: keymap_transform_0 {
+        compatible = "zmk,matrix-transform";
+        columns = <4>;
+        rows = <6>;
+        /*
+         * | F1   | F2   | F3   | F4   |
+         * | Num  | /    | *    | -    |
+         * | 7    | 8    | 9    | +    |
+         * | 4    | 5    | 6    |      |  <- + is 2U tall (no switch at R3C3)
+         * | 1    | 2    | 3    | Entr |
+         * | 0         | Del  |      |  <- 0 is 2U wide, Enter 2U tall (no switch at R5C3)
+         */
+        map = <
+            RC(0,0) RC(0,1) RC(0,2) RC(0,3)
+            RC(1,0) RC(1,1) RC(1,2) RC(1,3)
+            RC(2,0) RC(2,1) RC(2,2) RC(2,3)
+            RC(3,0) RC(3,1) RC(3,2)
+            RC(4,0) RC(4,1) RC(4,2) RC(4,3)
+            RC(5,0)                 RC(5,2)
+        >;
+    };
+
+    kscan0: kscan {
+        compatible = "zmk,kscan-gpio-matrix";
+        diode-direction = "col2row";
+
+        row-gpios
+            = <&pro_micro 21 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&pro_micro 20 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&pro_micro 19 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&pro_micro 18 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&pro_micro 17 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&pro_micro 16 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            ;
+
+        col-gpios
+            = <&pro_micro 2 GPIO_ACTIVE_HIGH>
+            , <&pro_micro 3 GPIO_ACTIVE_HIGH>
+            , <&pro_micro 4 GPIO_ACTIVE_HIGH>
+            , <&pro_micro 5 GPIO_ACTIVE_HIGH>
+            ;
+    };
+};
