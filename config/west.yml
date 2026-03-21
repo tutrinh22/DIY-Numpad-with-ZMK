@@ -5,7 +5,12 @@ manifest:
   projects:
     - name: zmk
       remote: zmkfirmware
-      revision: zmk-stable
+      revision: main
       import: app/west.yml
+    - name: zmk-nice-nano
+      url: https://github.com/nicekeyboards/zmk-nice-nano
+      revision: main
+      path: modules/nicekeyboards/zmk-nice-nano
+      import: false
   self:
     path: config

@@ -1,0 +1,7 @@
+# ZMK west workspace (generated, do not commit)
+.west/
+zmk/
+zephyr/
+modules/
+optional/
+build/
