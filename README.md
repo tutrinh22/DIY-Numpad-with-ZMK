@@ -38,6 +38,7 @@
 
 ---
 
+
 ## Phần cứng
 
 | Thành phần | Thông tin |
@@ -66,9 +67,9 @@
 > **Lưu ý quan trọng:**
 > - ROW5 dùng **D6 (P1.00)** thay vì D16 (P0.10) vì D16 là chân NFC
 > - NFC controller bị disable trong overlay để giải phóng chân GPIO
-> - `+` là phím 2U tall (ROW2 + ROW3 gộp lại)
-> - `Enter` là phím 2U tall (ROW3 + ROW4 + ROW5 gộp lại)  
-> - `0` là phím 2U wide
+> - `+` là phím 2U tall (switch tại ROW2-COL3, keycap vật lý trải dài ROW2+ROW3)
+> - `Enter` là phím 2U tall (switch tại ROW3-COL3, keycap vật lý trải dài ROW3+ROW4)
+> - `0` là phím 2U wide (switch tại ROW5-COL0, keycap vật lý trải rộng COL0+COL1)
 
 ### WS2812B LED
 
@@ -90,14 +91,14 @@
 ├────────┼──────┼────────┼─────────┤
 │  NUM   │  /   │   *    │    -    │
 ├────────┼──────┼────────┼─────────┤
-│   7    │  8   │   9    │         │
-├────────┼──────┼────────┤    +    │
-│   4    │  5   │   6    │         │
+│   7    │  8   │   9    │    +    │
 ├────────┼──────┼────────┼─────────┤
-│   1    │  2   │   3    │         │
-├────────┼──────┼────────┤  ENTER  │
-│      0       │  DEL   │         │
-└──────────────┴────────┴─────────┘
+│   4    │  5   │   6    │  ENTER  │
+├────────┼──────┼────────┼─────────┘
+│   1    │  2   │   3    │         
+├────────┼──────┼────────┤
+│   0    │      │  DEL   │  
+└────────┴──────┴────────┘
 ```
 
 \* Phím PAUSE có chức năng đặc biệt (xem bên dưới)
