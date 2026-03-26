@@ -1,7 +1,87 @@
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/rgb.h>
 
 / {
+    macros {
+        rgb_next: rgb_next {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&rgb_ug RGB_ON>, <&rgb_ug RGB_EFF>;
+        };
+        bri_up5: bri_up5 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings =
+                <&rgb_ug RGB_BRI>,
+                <&rgb_ug RGB_BRI>,
+                <&rgb_ug RGB_BRI>,
+                <&rgb_ug RGB_BRI>,
+                <&rgb_ug RGB_BRI>;
+        };
+        bri_dn5: bri_dn5 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings =
+                <&rgb_ug RGB_BRD>,
+                <&rgb_ug RGB_BRD>,
+                <&rgb_ug RGB_BRD>,
+                <&rgb_ug RGB_BRD>,
+                <&rgb_ug RGB_BRD>;
+        };
+        spd_up5: spd_up5 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings =
+                <&rgb_ug RGB_SPI>,
+                <&rgb_ug RGB_SPI>,
+                <&rgb_ug RGB_SPI>,
+                <&rgb_ug RGB_SPI>,
+                <&rgb_ug RGB_SPI>;
+        };
+        spd_dn5: spd_dn5 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings =
+                <&rgb_ug RGB_SPD>,
+                <&rgb_ug RGB_SPD>,
+                <&rgb_ug RGB_SPD>,
+                <&rgb_ug RGB_SPD>,
+                <&rgb_ug RGB_SPD>;
+        };
+    };
+
+    behaviors {
+        // 1-tap = PAUSE, 2-tap = next effect, 3-tap = LED mode, 4-tap = Boot mode
+        td_pause: td_pause {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <300>;
+            bindings = <&kp PAUSE_BREAK>, <&rgb_next>, <&tog 1>, <&tog 2>;
+        };
+        // Phím NUM trong boot mode: 1-tap = reset, 2-tap = bootloader
+        td_num: td_num {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <500>;
+            bindings = <&sys_reset>, <&bootloader>;
+        };
+        // Phím + trong LED mode: 1-tap = brightness +5, 2-tap = speed +5
+        td_plus: td_plus {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <300>;
+            bindings = <&bri_up5>, <&spd_up5>;
+        };
+        // Phím - trong LED mode: 1-tap = brightness -5, 2-tap = speed -5
+        td_minus: td_minus {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <300>;
+            bindings = <&bri_dn5>, <&spd_dn5>;
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
@@ -23,12 +103,60 @@
              * (21 keys total)
              */
             bindings = <
-                &kp PSCRN   &kp INS     &kp SLCK    &kp PAUSE_BREAK
+                &kp PSCRN   &kp INS     &kp SLCK    &td_pause
                 &kp KP_NLCK &kp KP_SLASH &kp KP_ASTERISK &kp KP_MINUS
                 &kp KP_N7   &kp KP_N8   &kp KP_N9   &kp KP_PLUS
-                &kp KP_N4   &kp KP_N5   &kp KP_N6
-                &kp KP_N1   &kp KP_N2   &kp KP_N3   &kp KP_ENTER
+                &kp KP_N4   &kp KP_N5   &kp KP_N6   &kp KP_ENTER
+                &kp KP_N1   &kp KP_N2   &kp KP_N3
                 &kp KP_N0               &kp KP_DOT
+            >;
+        };
+
+        led_layer {
+            /*
+             * LED EDIT MODE (vào bằng triple-tap PAUSE)
+             * ┌────────┬──────┬────────┬─────────┐
+             * │ [pass] │[pass]│ [pass] │  EXIT   │  <- 1-tap PAUSE để thoát
+             * ├────────┼──────┼────────┼─────────┤
+             * │ [pass] │[pass]│  HUE+  │   BRI-  │  <- * đổi màu, - giảm sáng
+             * ├────────┼──────┼────────┼─────────┤
+             * │ [pass] │[pass]│ [pass] │  BRI+   │  <- + tăng sáng
+             * ├────────┼──────┼────────┼─────────┤
+             * │ [pass] │[pass]│ [pass] │ [pass]  │
+             * ├────────┼──────┼────────┤         │
+             * │ [pass] │[pass]│ [pass] │         │
+             * ├─────────────┬─┴──────┐ │         │
+             * │    [pass]   │ [pass] │ │         │
+             * └─────────────┴────────┘ └─────────┘
+             * BRI+/-: 1-tap = 1 bước, 2-tap = 5 bước
+             */
+            bindings = <
+                &trans      &trans      &trans          &tog 1
+                &trans      &trans      &rgb_ug RGB_HUI &td_minus
+                &trans      &trans      &trans          &td_plus
+                &trans      &trans      &trans          &trans
+                &trans      &trans      &trans
+                &trans                  &trans
+            >;
+        };
+
+        boot_layer {
+            /*
+             * BOOT MODE (vào bằng 4-tap PAUSE)
+             * ┌────────┬──────┬────────┬─────────┐
+             * │ [pass] │[pass]│ [pass] │  EXIT   │  <- 1-tap PAUSE để thoát
+             * ├────────┼──────┼────────┼─────────┤
+             * │  NUM*  │[pass]│ [pass] │ [pass]  │  <- 1-tap = reset, 2-tap = bootloader
+             * └────────┴──────┴────────┴─────────┘
+             * Các phím khác bị khóa (none) để tránh nhấn nhầm
+             */
+            bindings = <
+                &trans      &none       &none       &tog 2
+                &td_num     &none       &none       &none
+                &none       &none       &none       &none
+                &none       &none       &none       &none
+                &none       &none       &none
+                &none                   &none
             >;
         };
     };

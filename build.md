@@ -1,0 +1,1 @@
+docker run --rm -v "D:\Arduino\DIY-numpad:/zmk-workspace" zmkfirmware/zmk-dev-arm:4.1-branch /bin/bash -c "cd /zmk-workspace && west build -p -s zmk/app -b nice_nano//zmk -- -DSHIELD=diy_numpad -DZMK_CONFIG=/zmk-workspace/config -DCMAKE_PREFIX_PATH=/zmk-workspace/zephyr 2>&1"
