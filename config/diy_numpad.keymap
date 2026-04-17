@@ -1,6 +1,7 @@
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/rgb.h>
+#include <dt-bindings/zmk/bt.h>
 
 / {
     macros {
@@ -143,20 +144,30 @@
         boot_layer {
             /*
              * BOOT MODE (vào bằng 4-tap PAUSE)
-             * ┌────────┬──────┬────────┬─────────┐
-             * │ [pass] │[pass]│ [pass] │  EXIT   │  <- 1-tap PAUSE để thoát
-             * ├────────┼──────┼────────┼─────────┤
-             * │  NUM*  │[pass]│ [pass] │ [pass]  │  <- 1-tap = reset, 2-tap = bootloader
-             * └────────┴──────┴────────┴─────────┘
-             * Các phím khác bị khóa (none) để tránh nhấn nhầm
+             * ┌──────────┬──────────┬──────────┬──────────┐
+             * │  [pass]  │ BT_SEL 1 │ BT_SEL 2 │   EXIT   │  <- Chọn profile BT 1/2, thoát
+             * ├──────────┼──────────┼──────────┼──────────┤
+             * │   NUM*   │ BT_SEL 0 │ BT_SEL 3 │ BT_SEL 4 │  <- 1-tap=reset, 2-tap=boot
+             * ├──────────┼──────────┼──────────┼──────────┤
+             * │  [none]  │  [none]  │  [none]  │ BT_CLR   │  <- Xóa bond profile hiện tại
+             * ├──────────┼──────────┼──────────┼──────────┤
+             * │  [none]  │  [none]  │  [none]  │BT_CLR_ALL│  <- Xóa TẤT CẢ bond
+             * ├──────────┼──────────┼──────────┤          │
+             * │  [none]  │  [none]  │  [none]  │          │
+             * ├──────────┴──────────┼──────────┤          │
+             * │       [none]        │  [none]  │          │
+             * └─────────────────────┴──────────┴──────────┘
+             * BT_SEL 0 = PC (mặc định)
+             * BT_SEL 1 = Điện thoại / thiết bị 2
+             * BT_SEL 2-4 = Thiết bị khác
              */
             bindings = <
-                &trans      &none       &none       &tog 2
-                &td_num     &none       &none       &none
-                &none       &none       &none       &none
-                &none       &none       &none       &none
-                &none       &none       &none
-                &none                   &none
+                &trans        &bt BT_SEL 1  &bt BT_SEL 2  &tog 2
+                &td_num       &bt BT_SEL 0  &bt BT_SEL 3  &bt BT_SEL 4
+                &none         &none         &none         &bt BT_CLR
+                &none         &none         &none         &bt BT_CLR_ALL
+                &none         &none         &none
+                &none                       &none
             >;
         };
     };

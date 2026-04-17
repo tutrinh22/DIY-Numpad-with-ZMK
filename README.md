@@ -4,6 +4,11 @@
 
 ## Changelog
 
+### [v1.5.0] - 2026-04-17
+- Thêm **Bluetooth multi-device support**: quản lý 5 profile BLE ngay trong Boot Mode
+- Thêm `#include <dt-bindings/zmk/bt.h>` vào keymap
+- Boot Mode có thêm các phím: `BT_SEL 0–4`, `BT_CLR`, `BT_CLR_ALL`
+
 ### [v1.4.0] - 2026-03-27
 - Fix bàn phím không thức dậy khi đang chạy pin: thêm `wakeup-source` vào `kscan0` trong overlay
 
@@ -112,6 +117,7 @@
 | **1 lần nhấn** | Gửi phím `PAUSE_BREAK` |
 | **2 lần nhấn** | Bật LED + chuyển sang effect tiếp theo |
 | **3 lần nhấn** | Vào / ra **LED Edit Mode** |
+| **4 lần nhấn** | Vào / ra **Boot Mode** |
 
 ---
 
@@ -127,6 +133,47 @@ Khi vào LED Edit Mode, các phím sau trên numpad thay đổi chức năng:
 | **`-`** | Giảm độ sáng -5 | Giảm tốc độ -5 |
 
 > Các phím còn lại (`trans`) vẫn hoạt động bình thường.
+
+---
+
+## Boot Mode
+
+Vào bằng **4-tap PAUSE**. Thoát bằng **1-tap PAUSE**.
+
+```
+┌──────────┬──────────┬──────────┬──────────┐
+│  [pass]  │ BT_SEL 1 │ BT_SEL 2 │   EXIT   │
+├──────────┼──────────┼──────────┼──────────┤
+│   NUM*   │ BT_SEL 0 │ BT_SEL 3 │ BT_SEL 4 │
+├──────────┼──────────┼──────────┼──────────┤
+│  [none]  │  [none]  │  [none]  │ BT_CLR   │
+├──────────┼──────────┼──────────┼──────────┤
+│  [none]  │  [none]  │  [none]  │BT_CLR_ALL│
+├──────────┼──────────┼──────────┤          │
+│  [none]  │  [none]  │  [none]  │          │
+├──────────┴──────────┼──────────┤          │
+│       [none]        │  [none]  │          │
+└─────────────────────┴──────────┴──────────┘
+```
+
+| Phím | Chức năng |
+|------|-----------|
+| **NUM** (1-tap) | Reset thiết bị |
+| **NUM** (2-tap) | Vào UF2 bootloader để flash firmware |
+| **INS** → `BT_SEL 1` | Chuyển sang profile 1 (điện thoại) |
+| **SCRLK** → `BT_SEL 2` | Chuyển sang profile 2 |
+| **/** → `BT_SEL 0` | Chuyển về profile 0 (PC) |
+| **`*`** → `BT_SEL 3` | Chuyển sang profile 3 |
+| **`-`** → `BT_SEL 4` | Chuyển sang profile 4 |
+| **`+`** → `BT_CLR` | Xóa bond của profile hiện tại |
+| **ENTER** → `BT_CLR_ALL` | Xóa **tất cả** bond BLE |
+
+### Cách kết nối thiết bị mới
+
+1. Vào Boot Mode (4-tap PAUSE)
+2. Chọn profile trống (ví dụ: `BT_SEL 1` cho điện thoại)
+3. Thoát Boot Mode (1-tap PAUSE)
+4. Bật Bluetooth trên thiết bị → tìm **"Min Numpad"** → kết nối
 
 ---
 
@@ -151,9 +198,21 @@ Nhấn **2 lần PAUSE** để cycle qua các hiệu ứng:
 | Tùy chọn | Giá trị | Mô tả |
 |----------|---------|-------|
 | `CONFIG_ZMK_BLE` | `y` | Bật Bluetooth |
-| `CONFIG_BT_DEVICE_NAME` | `"DIY Numpad"` | Tên hiển thị BLE |
+| `CONFIG_BT_DEVICE_NAME` | `"Min Numpad"` | Tên hiển thị BLE |
 | `CONFIG_ZMK_BLE_CLEAR_BONDS_ON_START` | `n` | Không xóa bond khi khởi động |
 | `CONFIG_ZMK_USB` | `y` | Hỗ trợ USB đồng thời với BLE |
+
+### Kết nối nhiều thiết bị (Multi-Profile)
+
+ZMK hỗ trợ **5 profile BLE** (0–4). Quản lý qua **Boot Mode**:
+
+| Profile | Thiết bị gợi ý |
+|---------|----------------|
+| 0 | PC (mặc định) |
+| 1 | Điện thoại |
+| 2–4 | Thiết bị khác |
+
+> **Lưu ý:** ZMK chỉ quảng bá BLE trên 1 profile tại một thời điểm. Khi USB đang cắm, BLE không quảng bá.
 
 ---
 

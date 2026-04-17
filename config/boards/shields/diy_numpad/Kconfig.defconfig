@@ -1,7 +1,7 @@
 if SHIELD_DIY_NUMPAD
 
 config ZMK_KEYBOARD_NAME
-    default "DIY Numpad"
+    default "Min Numpad"
 
 config ZMK_USB
     default y
