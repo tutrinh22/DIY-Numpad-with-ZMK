@@ -4,6 +4,11 @@
 
 ## Changelog
 
+### [v1.6.0] - 2026-04-17
+- Tắt `CONFIG_ZMK_RGB_UNDERGLOW_AUTO_OFF_IDLE` (`n`): LED không tự tắt khi idle ở chế độ USB
+  - Trước: LED tắt sau idle timeout và không đánh thức lại được khi cắm USB
+  - Sau: LED sáng liên tục khi cắm USB; BT mode vẫn tắt LED khi sleep và đánh thức bình thường
+
 ### [v1.5.0] - 2026-04-17
 - Thêm **Bluetooth multi-device support**: quản lý 5 profile BLE ngay trong Boot Mode
 - Thêm `#include <dt-bindings/zmk/bt.h>` vào keymap
